@@ -10,8 +10,11 @@ def sign_up(email:str, password:str) -> Response:
         return Response({"detail":"Email already exists"},status = status.HTTP_400_BAD_REQUEST)
     else:
         user = create_user(email, password)
-        pass
-        return Response({'detail':"Successfully Added"}, status = status.HTTP_200_OK)
+        return_user = {
+            'id': user.id,
+            'email': user.email
+        }
+        return Response({'detail':return_user}, status = status.HTTP_200_OK)
 
 
 def create_user(email: str, password: str):

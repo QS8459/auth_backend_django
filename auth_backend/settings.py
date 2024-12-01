@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from auth_backend.config import settings
+# from auth_backend.config import settings
 import sys, os
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(os.path.join(BASE_DIR,'apps'))
@@ -21,7 +22,10 @@ sys.path.append(os.path.join(BASE_DIR,'apps'))
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = settings.secret_key
+
+# SECRET_KEY = settings.secret_key
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_spectacular',
     'rest_framework',
+    'rest_framework_simplejwt',
     'apps',
     'accounts'
 ]
@@ -94,10 +99,10 @@ DATABASES = {
     # }
     'default':{
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':settings.pg_database,
-        'USER':settings.pg_user,
-        'PASSWORD': settings.pg_password,
-        'HOST':settings.pg_host,
+        'NAME':os.getenv("PG_DATABASE"),
+        'USER':os.getenv('PG_USER'),
+        'PASSWORD': os.getenv("PG_PASSWORD"),
+        'HOST':os.getenv("PG_HOST"),
         'PORT': '5432'
     }
 }
@@ -153,9 +158,19 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
+SIMPLE_JWT= {
+    'ACCESS_TOKEN_LIFETIME':timedelta(minutes=60),
+    'SLIDING_TOKEN_REFRESH_TIME':timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME_LATER_USER': timedelta(days=30)
+}
 
 
 SPECTACULAR_SETTINGS = {
