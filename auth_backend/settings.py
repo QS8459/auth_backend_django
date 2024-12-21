@@ -14,6 +14,8 @@ from pathlib import Path
 # from auth_backend.config import settings
 import sys, os
 from datetime import timedelta
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(os.path.join(BASE_DIR,'apps'))

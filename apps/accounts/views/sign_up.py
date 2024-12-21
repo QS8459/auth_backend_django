@@ -1,11 +1,12 @@
-from rest_framework.views import APIView
+from rest_framework.views import APIView, Response
 from rest_framework.permissions import AllowAny
 from accounts.services.sign_up import sign_up
-from accounts.serializers.sign_up import SignUpSerializer
+from accounts.serializers.sign_up import SignUpSerializer, SignUpResponse
 
 class UserSignUpView(APIView):
     serializer_class = SignUpSerializer
     permission_classes = [AllowAny]
+
 
     def post(self, request):
         serializer = self.serializer_class(data = request.data)
